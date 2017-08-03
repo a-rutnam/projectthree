@@ -12,6 +12,7 @@ luke
 
 
 -->
+
 <script>
 
 
@@ -62,13 +63,11 @@ $(document).ready(function(){
           $('.blurb'+[i+1] ).text( articles[i].description)
           $(".photo"+[i+1]).attr('src', articles[i].urlToImage);
 
+          //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
            $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
           // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
 
 
-          var newSrc = articles[i].urlToImage;
-
-          // $('img[src="' + oldSrc + '"]').attr('src', newSrc);
 
 
       }//fori

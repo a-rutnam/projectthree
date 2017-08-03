@@ -13,7 +13,14 @@ textarea {position: absolute; right: 0; top: 20; font-size: 16pt; }
 .exercise-box {
   border: 2px solid hotpink;
   position: absolute;
+
 }
+
+/*#moving{
+  background-image: url("app/assets/images/yellow.jpg")
+}*/
+
+
 
 body{
   z-index: 100;
@@ -27,7 +34,14 @@ canvas {
   /*z-index: -100;*/
 }
 
+div.a {
+width: 50px;
+height:50px;
+background-color:red;
+position:fixed;
+display: none;
 
+}
 
 .navbar-inverse {
     background-color: #ae1717 !important
