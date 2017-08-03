@@ -13,7 +13,7 @@ var target_url = '<%= @target_url %>';
 
 var
 box,
-boxesTouchedCount
+boxesTouchedCount = 0,
 boxTopLeft,
 boxBottomRight,
 ox = 0,
@@ -253,9 +253,16 @@ for (var i = 0; i < boxes.length; i++) {
 
     // document.getElementById('deer').style.display= 'none';
     // $box.css('background-color', 'red');
+    boxesTouchedCount += 1;
     box.touched = true;
     $('#box' + i).hide();
-    console.log("hey"+ i);
+
+    if (boxesTouchedCount === boxes.length){
+      console.log('yay');
+      $('#myModal').modal('show');
+
+    }
+
   }
 
 }
@@ -417,7 +424,7 @@ boxes = [
 {x: 100, y: 800, width: 100, height: 100, touched: false},
 {x: 200, y: 100, width: 100, height: 100, touched: false},
 {x: 500, y: 50, width: 100, height: 100, touched: false},
-{x: 400, y: 1000, width: 100, height: 100, touched: false},
+{x: 400, y: 900, width: 100, height: 100, touched: false},
 {x: 100, y: 200, width: 100, height: 100, touched: false},
 {x: 100, y: 500, width: 100, height: 100, touched: false},
 {x: 1500, y: 800, width: 100, height: 100, touched: false},
@@ -451,3 +458,26 @@ left: box.x + 'px'
 });//doc ready
 
 </script>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Modal Header</h4>
+        </div>
+        <div class="modal-body">
+          <p>Some text in the modal.</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+
+    </div>
+  </div>

@@ -27,14 +27,17 @@ canvas {
   /*z-index: -100;*/
 }
 
-.mainbit{
-  padding-top: 20px;
-}
+
 
 .navbar-inverse {
     background-color: #ae1717 !important
   }
   .navbar-inverse .navbar-brand{
+    color: white !important;
+    font-family: Times;
+  }
+
+  .yay a{
     color: white !important;
     font-family: Times;
   }
