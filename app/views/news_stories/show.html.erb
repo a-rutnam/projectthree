@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @news_story.name %>
+</p>
+
+<%= link_to 'Edit', edit_news_story_path(@news_story) %> |
+<%= link_to 'Back', news_stories_path %>
