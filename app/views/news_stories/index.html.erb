@@ -1,18 +1,3 @@
-<!--
-edge
-1 api source+limit not working, need to get 9
-2 heoku and web sockets
-
-
-
-luke
-1 smoosh osc to this rails project
-2 do if box touch div element containing link to article display:yes? in modal or close modal
-3add red box div, make em move, understand dom thing
-
-
--->
-
 <script>
 
 
@@ -41,6 +26,7 @@ $(document).ready(function(){
     .done(function(response){
       var articlesObj = $(response)
 
+
       //how do i each over this?  I want to do a
       // @articlesObj.each do |article|
       // loop below the script, but I don't know where to define the variables. should all this ajax be in the js file?
@@ -55,7 +41,7 @@ $(document).ready(function(){
         // $( '<img class="img-responsive src="" >' ).appendTo( ".col-md-4 portfolio-item" );
 
         //alternative where nine boxes are already there :
-        console.log(articles)
+
 
         // don't know why the i+1 is nec:
 
@@ -79,6 +65,46 @@ $(document).ready(function(){
       console.log('AJAX ERROR:', xhr, status, err);
     });//fail
 
+
+          $.ajax({
+              url: "https://newsapi.org/v1/articles?source=breitbart-news",
+              type: "GET",
+              data:{
+                apiKey: newsApiKey
+                // limit: 10
+                // sortBy: "latest",
+                // source: "mtv-news",
+              }
+            })//ajax
+            .done(function(response){
+              var articlesObj2 = $(response)
+
+
+
+    var articles2 = response.articles
+
+    for (var j = 0; j < articles2.length; j++) {
+
+
+        $('.title'+[j+1] ).text( articles2[j].title )
+        $('.blurb'+[j+1] ).text( articles2[j].description)
+        $(".photo"+[j+1]).attr('src', articles2[j].urlToImage);
+
+        //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
+         $("#link"+[j+1]).attr('href', '/exercise?url='+ encodeURI(articles2[j].url) );
+        // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
+
+
+
+
+    }//forj
+
+  })//done
+
+  .fail(function(xhr, status, err){
+    console.log('AJAX ERROR:', xhr, status, err);
+  });//fail
+
 });//doc ready
 
 
@@ -91,109 +117,121 @@ $(document).ready(function(){
  <div class="container">
 
      <!-- Page Header -->
-     <div class="row">
-         <div class="col-lg-12">
-             <h1 class="page-header">The latest news
-                 <small>...but you'll have to werk for it</small>
-             </h1>
-         </div>
-     </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <h1 class="page-header">The latest news
+        <small>...but you'll have to werk for it</small>
+      </h1>
+    </div>
+  </div>
      <!-- /.row -->
 
-     <div class="row">
-         <div class="col-md-4 portfolio-item">
-             <a id="link1" href="/exercise">
-                 <img class="img-responsive photo1" src ="" alt="">
-             </a>
-             <h3 class=title1>
-                 <span></span>
-             </h3>
-             <p class=blurb1>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
+  <div class="row">
 
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a id="link2" href="/exercise">
-                 <img class="img-responsive photo2" src="" alt="">
-             </a>
-             <h3 class=title2>
-                 <a href="#">Project Name</a>
-             </h3>
-               <p class=blurb2>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a id="link3"  href="#">
-                 <img class="img-responsive photo3" src="" alt="">
-             </a>
-             <h3 class=title3>
-                 <a href="#">Project Name</a>
-             </h3>
-           <p class=blurb3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-     </div>
+    <div class="col-md-4 portfolio-item">
+      <a id="link1" href="/exercise">
+        <img class="img-responsive photo1" src ="" alt="">
+      </a>
+      <h3 class=title1></h3>
+      <p class=blurb1></p>
+    </div>
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link2" href="/exercise">
+        <img class="img-responsive photo2" src="" alt="">
+      </a>
+      <h3 class=title2></h3>
+      <p class=blurb2></p>
+    </div>
+
+   <div class="col-md-4 portfolio-item">
+    <a id="link3"  href="#">
+      <img class="img-responsive photo3" src="" alt="">
+    </a>
+      <h3 class=title3></h3>
+      <p class=blurb3></p>
+   </div>
+
+  </div>
+
      <!-- /.row -->
 
      <!-- Projects Row -->
-     <div class="row">
-         <div  id="link4" class="col-md-4 portfolio-item">
-             <a href="#">
-                 <img class="img-responsive photo4" src="" alt="">
-             </a>
-             <h3 class=title4>
-                 <a href="#">Project Name</a>
-             </h3>
-       <p class=blurb4>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a  id="link5"  href="#">
-                 <img class="img-responsive photo5" src="" alt="">
-             </a>
-             <h3 class=title5>
-                 <a href="#">Project Name</a>
-             </h3>
-             <p class=blurb5>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a  id="link6"  href="#">
-                 <img class="img-responsive photo6" src="" alt="">
-             </a>
-             <h3 class=title6>
-                 <a href="#">Project Name</a>
-             </h3>
-             <p class=blurb6>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-     </div>
+  <div class="row">
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link4" href="#">
+        <img class="img-responsive photo4" src="" alt="">
+      </a>
+      <h3 class=title4></h3>
+      <p class=blurb4></p>
+    </div>
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link5"  href="#">
+        <img class="img-responsive photo5" src="" alt="">
+      </a>
+      <h3 class=title5></h3>
+      <p class=blurb5></p>
+    </div>
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link6" href="#">
+        <img class="img-responsive photo6" src="" alt="">
+      </a>
+      <h3 class=title6></h3>
+      <p class=blurb6></p>
+   </div>
+
+  </div>
 
      <!-- Projects Row -->
-     <div class="row">
-         <div class="col-md-4 portfolio-item">
-             <a  id="link7" href="#">
-                 <img class="img-responsive photo7" src="" alt="">
-             </a>
-             <h3 class=title7>
-                 <a href="#">Project Name</a>
-             </h3>
-         <p class=blurb7>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a  id="link8" href="#">
-                 <img class="img-responsive photo8" src="" alt="">
-             </a>
-             <h3 class=title8>
-                 <a href="#">Project Name</a>
-             </h3>
-           <p class=blurb8>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-         <div class="col-md-4 portfolio-item">
-             <a href="#">
-                 <img class="img-responsive photo9" src="" alt="">
-             </a>
-             <h3 class=title9>
-                 <a  id="link9" href="#">Project Name</a>
-             </h3>
-             <p class=blurb9>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p>
-         </div>
-     </div>
+  <div class="row">
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link7" href="#">
+        <img class="img-responsive photo7" src="" alt="">
+      </a>
+      <h3 class=title7></h3>
+      <p class=blurb7></p>
+    </div>
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link8" href="#">
+        <img class="img-responsive photo8" src="" alt="">
+      </a>
+      <h3 class=title8></h3>
+      <p class=blurb8></p>
+    </div>
+
+    <div class="col-md-4 portfolio-item">
+      <a id="link9" href="#">
+        <img class="img-responsive photo9" src="" alt="">
+      </a>
+      <h3 class=title9></h3>
+      <p class=blurb9></p>
+    </div>
+  </div>
      <!-- /.row -->
 
 
      <hr>
+
+     <!--
+     tommorrow
+     1 fix refresh thing
+
+     edge
+
+     1 api source+limit not working, need to get 9
+     2 heoku and web sockets
+
+
+
+     luke
+     1 smoosh osc to this rails project
+     2 do if box touch div element containing link to article display:yes? in modal or close modal
+     3add red box div, make em move, understand dom thing
+
+
+     -->

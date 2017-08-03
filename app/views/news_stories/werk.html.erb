@@ -1,9 +1,4 @@
-<!--
-1 both hands
-2 deploy
-3 move divs
-4 modal options inc home, link opens in new tab
--->
+
 
 <script type="text/javascript">
 
@@ -272,11 +267,10 @@ for (var i = 0; i < boxes.length; i++) {
 }//for every box
 
 
-      if(
+      if(boxesTouchedCount === boxes.length &&
         handBrowserX >= movingBoxX && handBrowserX <= (movingBoxX + box.width) &&
         handBrowserY >= movingBoxY  && handBrowserY <= (movingBoxY + box.height)
       ){
-        console.log('yay');
         $('#myModal').modal('show');
       }//if movingbox touched
 
@@ -537,3 +531,11 @@ function calcSpeed(prev, next) {
 
     </div>
   </div>
+
+
+  <!--
+  1 both hands
+  2 deploy
+  3 move divs
+  4 modal options inc home, link opens in new tab
+  -->
