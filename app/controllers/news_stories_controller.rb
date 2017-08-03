@@ -13,6 +13,7 @@ class NewsStoriesController < ApplicationController
   end
 
   def werk
+    @target_url = params[:url]
     # kinect page get link from index
   end
 

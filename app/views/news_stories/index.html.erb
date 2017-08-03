@@ -1,8 +1,8 @@
 <!--
 edge
 1 api source+limit not working, need to get 9
-2
-3 should i take off users and make it pure front end, dpeloy to git
+2 heoku and web sockets
+
 
 
 luke
@@ -61,6 +61,8 @@ $(document).ready(function(){
           $('.title'+[i+1] ).text( articles[i].title )
           $('.blurb'+[i+1] ).text( articles[i].description)
           $(".photo"+[i+1]).attr('src', articles[i].urlToImage);
+
+           $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
           // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
 
 
@@ -101,7 +103,7 @@ $(document).ready(function(){
 
      <div class="row">
          <div class="col-md-4 portfolio-item">
-             <a href="/exercise">
+             <a id="link1" href="/exercise">
                  <img class="img-responsive photo1" src ="" alt="">
              </a>
              <h3 class=title1>

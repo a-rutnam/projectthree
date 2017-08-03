@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+var target_url = '<%= @target_url %>';
+
 // https://github.com/processing/p5.js/wiki/p5.js-overview
 
 //
@@ -11,6 +13,7 @@
 
 var
 box,
+boxesTouchedCount
 boxTopLeft,
 boxBottomRight,
 ox = 0,
@@ -239,7 +242,7 @@ for (var i = 0; i < boxes.length; i++) {
   // console.log(handBrowserX, box.left, (box.left + box.width), box);
   // console.log(handBrowserY, box.top, (box.top + box.height));
 
-  if(
+  if( box.touched === false &&
     handBrowserX >= box.x && handBrowserX <= (box.x + box.width) &&
     handBrowserY >= box.y  && handBrowserY <= (box.y + box.height)
   ){
@@ -250,6 +253,7 @@ for (var i = 0; i < boxes.length; i++) {
 
     // document.getElementById('deer').style.display= 'none';
     // $box.css('background-color', 'red');
+    box.touched = true;
     $('#box' + i).hide();
     console.log("hey"+ i);
   }
@@ -410,21 +414,21 @@ $(document).ready(function () {
 // { boxLeft: left, boxTop: top } = $('#deer').position().left;
 
 boxes = [
-{x: 100, y: 800, width: 100, height: 100},
-{x: 200, y: 100, width: 100, height: 100},
-{x: 500, y: 50, width: 100, height: 100},
-{x: 400, y: 1000, width: 100, height: 100},
-{x: 100, y: 200, width: 100, height: 100},
-{x: 100, y: 500, width: 100, height: 100},
-{x: 1500, y: 800, width: 100, height: 100},
-{x: 800, y: 20, width: 100, height: 100},
-{x: 900, y: 50, width: 100, height: 100},
-{x: 1000, y: 90, width: 100, height: 100},
-{x: 1600, y: 800, width: 100, height: 100},
-{x: 1300, y: 750, width: 100, height: 100},
-{x: 1400, y: 400, width: 100, height: 100},
-{x: 1500, y: 40, width: 100, height: 100},
-{x: 1600, y: 40, width: 100, height: 100},
+{x: 100, y: 800, width: 100, height: 100, touched: false},
+{x: 200, y: 100, width: 100, height: 100, touched: false},
+{x: 500, y: 50, width: 100, height: 100, touched: false},
+{x: 400, y: 1000, width: 100, height: 100, touched: false},
+{x: 100, y: 200, width: 100, height: 100, touched: false},
+{x: 100, y: 500, width: 100, height: 100, touched: false},
+{x: 1500, y: 800, width: 100, height: 100, touched: false},
+{x: 800, y: 20, width: 100, height: 100, touched: false},
+{x: 900, y: 50, width: 100, height: 100, touched: false},
+{x: 1000, y: 90, width: 100, height: 100, touched: false},
+{x: 1600, y: 800, width: 100, height: 100, touched: false},
+{x: 1300, y: 750, width: 100, height: 100, touched: false},
+{x: 1400, y: 400, width: 100, height: 100, touched: false},
+{x: 1500, y: 40, width: 100, height: 100, touched: false},
+{x: 1600, y: 40, width: 100, height: 100, touched: false},
 ];
 
 for (var i = 0; i < boxes.length; i++) {
