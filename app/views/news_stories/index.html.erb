@@ -11,59 +11,59 @@ $(document).ready(function(){
   var newsApiKey = "c21f307cc3974ec1b6900af92dc262ca"
   // var sortIt = "popular"
 
-
-
-  $.ajax({
-      url: baseURL,
-      type: "GET",
-      data:{
-        apiKey: newsApiKey
-        // limit: 10
-        // sortBy: "latest",
-        // source: "mtv-news",
-      }
-    })//ajax
-    .done(function(response){
-      var articlesObj = $(response)
-
-
-      //how do i each over this?  I want to do a
-      // @articlesObj.each do |article|
-      // loop below the script, but I don't know where to define the variables. should all this ajax be in the js file?
-      var articles = response.articles
-
-      for (var i = 0; i < articles.length; i++) {
-
-
-        //edge's suggestion build each square on fly. such a fucker to do, and I can't get interpolated daa in there:
-        // $( '<div class="newwow">' ).appendTo( ".mainwow" );
-        // $( '<div class="col-md-4 portfolio-item" <img class="img-responsive src="">' ).appendTo( ".newwow" );
-        // $( '<img class="img-responsive src="" >' ).appendTo( ".col-md-4 portfolio-item" );
-
-        //alternative where nine boxes are already there :
-
-
-        // don't know why the i+1 is nec:
-
-          $('.title'+[i+1] ).text( articles[i].title )
-          $('.blurb'+[i+1] ).text( articles[i].description)
-          $(".photo"+[i+1]).attr('src', articles[i].urlToImage);
-
-          //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
-           $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
-          // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
-
-
-
-
-      }//fori
-
-
-    })//done
-
-    .fail(function(xhr, status, err){
-      console.log('AJAX ERROR:', xhr, status, err);
-    });//fail
+  //
+  //
+  // $.ajax({
+  //     url: baseURL,
+  //     type: "GET",
+  //     data:{
+  //       apiKey: newsApiKey
+  //       // limit: 10
+  //       // sortBy: "latest",
+  //       // source: "mtv-news",
+  //     }
+  //   })//ajax
+  //   .done(function(response){
+  //     var articlesObj = $(response)
+  //
+  //
+  //     //how do i each over this?  I want to do a
+  //     // @articlesObj.each do |article|
+  //     // loop below the script, but I don't know where to define the variables. should all this ajax be in the js file?
+  //     var articles = response.articles
+  //
+  //     for (var i = 0; i < articles.length; i++) {
+  //
+  //
+  //       //edge's suggestion build each square on fly. such a fucker to do, and I can't get interpolated daa in there:
+  //       // $( '<div class="newwow">' ).appendTo( ".mainwow" );
+  //       // $( '<div class="col-md-4 portfolio-item" <img class="img-responsive src="">' ).appendTo( ".newwow" );
+  //       // $( '<img class="img-responsive src="" >' ).appendTo( ".col-md-4 portfolio-item" );
+  //
+  //       //alternative where nine boxes are already there :
+  //
+  //
+  //       // don't know why the i+1 is nec:
+  //
+  //         $('.title'+[i+1] ).text( articles[i].title )
+  //         $('.blurb'+[i+1] ).text( articles[i].description)
+  //         $(".photo"+[i+1]).attr('src', articles[i].urlToImage);
+  //
+  //         //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
+  //          $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
+  //         // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
+  //
+  //
+  //
+  //
+  //     }//fori
+  //
+  //
+  //   })//done
+  //
+  //   .fail(function(xhr, status, err){
+  //     console.log('AJAX ERROR:', xhr, status, err);
+  //   });//fail
 
 
           $.ajax({
@@ -82,17 +82,18 @@ $(document).ready(function(){
 
 
     var articles2 = response.articles
+// debugger;
 
     for (var j = 0; j < articles2.length; j++) {
 
 
-        $('.title'+[j+1] ).text( articles2[j].title )
-        $('.blurb'+[j+1] ).text( articles2[j].description)
-        $(".photo"+[j+1]).attr('src', articles2[j].urlToImage);
+      $('.title'+[j+1] ).text( articles2[j].title )
+      $('.blurb'+[j+1] ).text( articles2[j].description)
+      $(".photo"+[j+1]).attr('src', articles2[j].urlToImage);
 
-        //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
-         $("#link"+[j+1]).attr('href', '/exercise?url='+ encodeURI(articles2[j].url) );
-        // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
+      //  $("#link"+[i+1]).attr('href', '/exercise?url='+ encodeURI(articles[i].url) );
+       $("#link"+[j+1]).attr('href', '/exercise?url='+ encodeURI(articles2[j].url) );
+      // $('.img-responsive'+[i+1] ).attr('src', articles[i].urlToImage )
 
 
 

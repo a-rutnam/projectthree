@@ -10,6 +10,10 @@ textarea {position: absolute; right: 0; top: 20; font-size: 16pt; }
   height: 100px;
 }*/
 
+.win{
+  font-size: 25px;
+}
+
 .exercise-box {
   border: 2px solid hotpink;
   position: absolute;
