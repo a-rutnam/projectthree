@@ -1,18 +1,30 @@
+.navbar-inverse {
+  background-color: #ae1717 !important
+}
+
+.navbar-inverse .navbar-brand{
+  color: white !important;
+  font-family: 'Old Standard TT', serif;
+  font-size: 28px;
+}
+
+.yay a{
+  color: white !important;
+  font-family: 'Old Standard TT', serif;
+  font-size: 20px;
+}
+
+html *{
+  font-family: 'Old Standard TT', serif !important;
+}
+
+footer{
+  float: right;
+  padding-right: 10px;
+}
 
 
-/*.start{
-  background-image: url("http://i.imgur.com/Rd6Ammn.png");
-  background-size: 100%;
-
-  width: 150px;
-  height:150px;
-    position: absolute;
-  color: white;
-  font-size: 30px;
-  text-align: center;
-  left: 500px;
-}*/
-
+/*kinect canvas page*/
 body {padding: 0; margin: 0; background-color: white; }
 button {position: absolute; right: 0; top: 0; }
 textarea {position: absolute; right: 0; top: 20; font-size: 16pt; }
@@ -57,21 +69,3 @@ position:fixed;
 display: none;
 
 }
-
-.navbar-inverse {
-    background-color: #ae1717 !important
-  }
-  .navbar-inverse .navbar-brand{
-    color: white !important;
-    font-family: Times;
-  }
-
-  .yay a{
-    color: white !important;
-    font-family: Times;
-  }
-
-  footer{
-    float: right;
-    padding-right: 10px;
-  }
