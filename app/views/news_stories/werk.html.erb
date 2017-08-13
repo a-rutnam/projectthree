@@ -1,267 +1,283 @@
-
-
 <script type="text/javascript">
-
-  // https://github.com/processing/p5.js/wiki/p5.js-overview
-
-  var target_url = '<%= @target_url %>';
+var target_url = '<%= @target_url %>';
 
 
-  var
-  box,
-  boxesTouchedCount = 0,
-  boxTopLeft,
-  boxBottomRight,
-  ox = 0,
-  oy = 0,
-  oz = 0,
-  oscy,
-  oscbut,
-  pinch,
-  capture,
-  pg,
-  head = false,
-  h = 0,
-  i = 0,
-  j = 0,
+var
+box,
+boxesTouchedCount = 0,
+boxTopLeft,
+boxBottomRight,
+ox = 0,
+oy = 0,
+oz = 0,
+oscy,
+oscbut,
+pinch,
+capture,
+pg,
+head = false,
+h = 0,
+i = 0,
+j = 0,
 
-  controller = null,
+controller = null,
 
-  joints = {
-    l_shoulder : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    r_shoulder : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    l_elbow    : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    r_elbow    : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    l_hand     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    r_hand     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    l_hip      : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    r_hip      : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    l_knee     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    r_knee     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    neck       : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-    head       : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
-  };
+joints = {
+l_shoulder : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+r_shoulder : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+l_elbow    : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+r_elbow    : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+l_hand     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+r_hand     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+l_hip      : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+r_hip      : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+l_knee     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+r_knee     : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+neck       : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+head       : {x: 0, y: 0, z: 0, vx: 0, vy: 0, vz: 0, ax: 0, ay: 0, az: 0 },
+};
+var updateJoint = function( jointObj, which, newData ){
 
-  var updateJoint = function( jointObj, which, newData ){
+  var j = jointObj[ which ];
+  if( !j ) return;  // don't bother with joints we haven't initialized in our object
+  // velocity
+  var newvx = newData.x - j.x;
+  var newvy = newData.y - j.y;
+  var newvz = newData.z - j.z;
+  // acceleration
+  j.ax = newvx - j.vx;
+  j.ay = newvy - j.vy;
+  j.az = newvz - j.vz;
+  // velocity
+  j.vx = newvx;
+  j.vy = newvy;
+  j.vz = newvz;
+  // position
+  j.x = newData.x;
+  j.y = newData.y;
+  j.z = newData.z;
+};//updateJoint
 
-    var j = jointObj[ which ];
+var oscPort = new osc.WebSocketPort({
+  url: "ws://localhost:8081" // URL to your Web Socket server.
+});
 
-    if( !j ) return;  // don't bother with joints we haven't initialized in our object
+oscPort.open();
 
-    // velocity
-    var newvx = newData.x - j.x;
-    var newvy = newData.y - j.y;
-    var newvz = newData.z - j.z;
-
-    // acceleration
-    j.ax = newvx - j.vx;
-    j.ay = newvy - j.vy;
-    j.az = newvz - j.vz;
-
-    // velocity
-    j.vx = newvx;
-    j.vy = newvy;
-    j.vz = newvz;
-
-    // position
-    j.x = newData.x;
-    j.y = newData.y;
-    j.z = newData.z;
-  };//updateJoint
-
-  var oscPort = new osc.WebSocketPort({
-    url: "ws://localhost:8081" // URL to your Web Socket server.
-  });
-
-  oscPort.open();
-
-  oscPort.on("message", function (oscMsg) {
-
-    if(oscMsg.address === '/joint') {
-
-      updateJoint(joints, oscMsg.args[0], {x: oscMsg.args[2], y: oscMsg.args[3], z: oscMsg.args[4]} );
-
-    }
-
-  });//oscPort
+oscPort.on("message", function (oscMsg) {
+  if(oscMsg.address === '/joint') {
+    updateJoint(joints, oscMsg.args[0], {x: oscMsg.args[2], y: oscMsg.args[3], z: oscMsg.args[4]} );
+  }
+});//oscPort
 
 
-  function setup(){
+// function setup(){
+//
+//   createCanvas(windowWidth, windowHeight);
+//
+//   colorMode(HSB, 360, 100, 100);
+//
+//   pg = createGraphics(100, 80);
+//
+//   textSize(44);
+// }//setup
 
 
-    // var canny = createCanvas(windowWidth, windowHeight);
-    // //
-    // canny.onload = function() {
-    //     canny();
-    // };
+// Draw a line between two joints
+var drawSkeletonLine = function( jData, a, b, xRange, yRange ){
+  line(
+  jData[a].x * xRange,
+  jData[a].y * yRange,
+  jData[b].x * xRange,
+  jData[b].y * yRange
+  );
+};
+
+function draw(){
+  background(0);
+  noStroke();
+
+  fill(frameCount%360, 100, 100);
+
+  var depth = map(oz, 0.35, 2.0, 0, 0.5);
 
 
-
-    createCanvas(windowWidth, windowHeight);
-
-
-    colorMode(HSB, 360, 100, 100);
-    // console.log(frameRate());
-
-    pg = createGraphics(100, 80);
-
-
-    textSize(44);
-  }//setup
-
-
-  // Draw a line between two joints
-  var drawSkeletonLine = function( jData, a, b, xRange, yRange ){
-    line(
-    jData[a].x * xRange,
-    jData[a].y * yRange,
-    jData[b].x * xRange,
-    jData[b].y * yRange
-    );
-  };
-
-  function draw(){
-
-    background(0);
-
-    noStroke();
-
-    fill(frameCount%360, 100, 100);
-
-    var depth = map(oz, 0.35, 2.0, 0, 0.5);
+  // kinect
+  if( joints.l_hand.x  ){
+    var handBrowserX = joints.l_hand.x * windowWidth;
+    var handBrowserY = joints.l_hand.y * windowHeight;
+animateDiv()
+  // if (//if hand hits start button, hard coded
+  //     handBrowserX >= 500 && handBrowserX <= (650) &&
+  //     handBrowserY >= 0 && handBrowserY <= (150)
+  //   ){
+  //     $("<div class='start'>").hide();
+  //     $("<div class='exercise-box'>").show();
+  //
+  //   }
 
 
-    // kinect
-
-    if( joints.l_hand.x  ){
-
-      var handBrowserX = joints.l_hand.x * windowWidth;
-      var handBrowserY = joints.l_hand.y * windowHeight;
-
-      // console.log('hand', boxesTouchedCount, boxes.length);
 
     //if hand hits deer div element
-
-      for (var i = 0; i < boxes.length; i++) {
-        var box = boxes[i];
-
-
-        var movingBoxX = parseInt($('.a').position().left)
-        var movingBoxY = parseInt($('.a').position().top)
-
-        if( box.touched === false &&
-          handBrowserX >= box.x && handBrowserX <= (box.x + box.width) &&
-          handBrowserY >= box.y  && handBrowserY <= (box.y + box.height)
-        ){
-          boxesTouchedCount += 1;
-          // console.log('inc', boxesTouchedCount, boxes.length);
-          box.touched = true;
-          $('#box' + i).hide();
-
-          if (boxesTouchedCount === boxes.length){
-
-            $('#moving').show();
-
-            animateDiv();
-          }//if all static boxes touched
-
-        }//if any stat box touched
-
-      }//for every box
-
-      if(boxesTouchedCount === boxes.length &&
-        handBrowserX >= movingBoxX && handBrowserX <= (movingBoxX + box.width) &&
-        handBrowserY >= movingBoxY  && handBrowserY <= (movingBoxY + box.height)
-      ){
-        $('#moving').hide();
-        $('#myModal').modal('show');
-      }//if movingbox touched
-
-
-      fill(200, 100, 100);
-      // text(oz.toFixed(2),  ox*windowWidth + 20, oy*windowHeight);
-      text(`x: ${ joints.l_hand.x.toFixed(2) }`,  20, 40);
-      text(`y: ${ joints.l_hand.y.toFixed(2) }`,  20, 80);
-      text(`z: ${ joints.l_hand.z.toFixed(2) }`,  20, 120);
-      text(`vx: ${ joints.l_hand.vx.toFixed(2) }`, 20, 160);
-      text(`vy: ${ joints.l_hand.vy.toFixed(2) }`, 20, 200);
-      text(`vz: ${ joints.l_hand.vz.toFixed(2) }`, 20, 240);
-      if( controller && controller.xTouch) {
-        text(`xT: ${ controller.xTouch.toFixed(2) }`, 20, 300);
-      }
-
-      strokeWeight(2);
-      stroke(50, 100, 100);
-
-      var head_width = Math.abs(joints.r_shoulder.x - joints.l_shoulder.x) / 3.0  ;
-      var head_left  = joints.head.x - head_width;
-      var head_right  = joints.head.x + head_width;
-
-      line(
-        head_left*windowWidth, joints.head.y*windowHeight,
-        joints.neck.x*windowWidth, joints.neck.y*windowHeight,
-      );
-      line(
-        head_right*windowWidth, joints.head.y*windowHeight,
-        joints.neck.x*windowWidth, joints.neck.y*windowHeight,
-      );
-      line(
-        head_right*windowWidth, joints.head.y*windowHeight,
-        head_left*windowWidth, joints.head.y*windowHeight,
-      );
-
-      drawSkeletonLine(joints, 'r_shoulder', 'r_hip', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'r_shoulder', 'r_elbow', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'r_elbow', 'r_hand', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_shoulder', 'r_shoulder', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_shoulder', 'l_hip', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_shoulder', 'l_elbow', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_elbow', 'l_hand', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_hip', 'r_hip', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'l_hip', 'l_knee', windowWidth, windowHeight);
-      drawSkeletonLine(joints, 'r_hip', 'r_knee', windowWidth, windowHeight);
-
-
-    }//if joints l hands x
-
-  }//draw function
-
-  //setting position of box div:
-  $(document).ready(function () {
-
-
-
-    // find div position
-    // { boxLeft: left, boxTop: top } = $('#deer').position().left;
-    boxes = [
-      {x: 200, y: 100, width: 100, height: 100, touched: false},
-      {x: 500, y: 50, width: 100, height: 100, touched: false},
-      {x: 900, y: 500, width: 100, height: 100, touched: false},
-      {x: 100, y: 200, width: 100, height: 100, touched: false},
-      // {x: 1500, y: 800, width: 100, height: 100, touched: false},
-      {x: 700, y: 20, width: 100, height: 100, touched: false},
-      {x: 900, y: 50, width: 100, height: 100, touched: false}
-      // {x: 1020, y: 110, width: 100, height: 100, touched: false},
-      // {x: 1600, y: 500, width: 100, height: 100, touched: false},
-      // {x: 1300, y: 750, width: 100, height: 100, touched: false},
-      // {x: 1400, y: 400, width: 100, height: 100, touched: false},
-      // {x: 1440, y: 60, width: 100, height: 100, touched: false},
-      // {x: 1600, y: 40, width: 100, height: 100, touched: false},
-    ];
-
     for (var i = 0; i < boxes.length; i++) {
       var box = boxes[i];
-      var $boxDiv = $('<div class="exercise-box">').attr('id', 'box'+i).css({
-        width:  box.width  + 'px',
-        height: box.height + 'px',
-        top:  box.y + 'px',
-        left: box.x + 'px'
-      })
-      .appendTo('body');
-    }
-  });//doc ready
+      // var movingBoxX = parseInt($('.a').position().left)
+      // var movingBoxY = parseInt($('.a').position().top)
+      var movingBoxX = parseInt($('#box'+i).position().left)
+      var movingBoxY = parseInt($('#box'+i).position().top)
 
-  //moving box:
+      if( box.touched === false &&
+        handBrowserX >= movingBoxX && handBrowserX <= (movingBoxX + box.width) &&
+        handBrowserY >= movingBoxY  && handBrowserY <= (movingBoxY + box.height)
+
+        // handBrowserX >= box.x && handBrowserX <= (box.x + box.width) &&
+        // handBrowserY >= box.y  && handBrowserY <= (box.y + box.height)
+      ){
+        boxesTouchedCount += 1;
+        box.touched = true;
+        $('#box' + i).hide();
+console.log(boxesTouchedCount);
+
+        if (boxesTouchedCount === boxes.length){
+          // $('#moving').show();
+          // animateDiv();
+          console.log('yay');
+          $('#myModal').modal('show');
+        }//if all static boxes touched
+      }//if any stat box touched
+    }//for every box
+
+    // if(
+    //   handBrowserX >= movingBoxX && handBrowserX <= (movingBoxX + box.width) &&
+    //   handBrowserY >= movingBoxY  && handBrowserY <= (movingBoxY + box.height)
+    // ){
+      // console.log('yay');
+      // $('#myModal').modal('show');
+    // }//if movingbox touched
+
+    fill(200, 100, 100);
+    // text(oz.toFixed(2),  ox*windowWidth + 20, oy*windowHeight);
+    text(`x: ${ joints.l_hand.x.toFixed(2) }`,  20, 40);
+    text(`y: ${ joints.l_hand.y.toFixed(2) }`,  20, 80);
+    text(`z: ${ joints.l_hand.z.toFixed(2) }`,  20, 120);
+    text(`vx: ${ joints.l_hand.vx.toFixed(2) }`, 20, 160);
+    text(`vy: ${ joints.l_hand.vy.toFixed(2) }`, 20, 200);
+    text(`vz: ${ joints.l_hand.vz.toFixed(2) }`, 20, 240);
+    if( controller && controller.xTouch) {
+      text(`xT: ${ controller.xTouch.toFixed(2) }`, 20, 300);
+    }
+    strokeWeight(2);
+    stroke(50, 100, 100);
+    // drawSkeletonLine(joints, 'neck', 'head', windowWidth, windowHeight);
+    var head_width = Math.abs(joints.r_shoulder.x - joints.l_shoulder.x) / 3.0  ;
+    var head_left  = joints.head.x - head_width;
+    var head_right  = joints.head.x + head_width;
+    line(
+      head_left*windowWidth, joints.head.y*windowHeight,
+      joints.neck.x*windowWidth, joints.neck.y*windowHeight,
+    );
+    line(
+      head_right*windowWidth, joints.head.y*windowHeight,
+      joints.neck.x*windowWidth, joints.neck.y*windowHeight,
+    );
+    line(
+      head_right*windowWidth, joints.head.y*windowHeight,
+      head_left*windowWidth, joints.head.y*windowHeight,
+    );
+    drawSkeletonLine(joints, 'r_shoulder', 'r_hip', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'r_shoulder', 'r_elbow', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'r_elbow', 'r_hand', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_shoulder', 'r_shoulder', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_shoulder', 'l_hip', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_shoulder', 'l_elbow', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_elbow', 'l_hand', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_hip', 'r_hip', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'l_hip', 'l_knee', windowWidth, windowHeight);
+    drawSkeletonLine(joints, 'r_hip', 'r_knee', windowWidth, windowHeight);
+
+  }//if joints hands
+
+}//draw function
+
+
+
+$(document).ready(function () {
+  createCanvas(windowWidth, windowHeight);
+
+  colorMode(HSB, 360, 100, 100);
+
+  pg = createGraphics(100, 80);
+
+  textSize(44);
+
+  // find div position
+  // { boxLeft: left, boxTop: top } = $('#deer').position().left;
+  boxes = [
+
+  {x: 200, y: 100, width: 100, height: 100, touched: false},
+  {x: 500, y: 50, width: 100, height: 100, touched: false},
+  {x: 1200, y: 100, width: 100, height: 100, touched: false},
+  {x: 100, y: 200, width: 100, height: 100, touched: false},
+  {x: 1500, y: 800, width: 100, height: 100, touched: false},
+  {x: 700, y: 20, width: 100, height: 100, touched: false},
+  {x: 900, y: 50, width: 100, height: 100, touched: false},
+  // {x: 1020, y: 110, width: 100, height: 100, touched: false},
+  {x: 1600, y: 500, width: 100, height: 100, touched: false},
+  // {x: 1300, y: 750, width: 100, height: 100, touched: false},
+  // {x: 1400, y: 400, width: 100, height: 100, touched: false},
+  // {x: 1440, y: 60, width: 100, height: 100, touched: false},
+  // {x: 1600, y: 40, width: 100, height: 100, touched: false},
+  ];
+  for (var i = 0; i < boxes.length; i++) {
+      var box = boxes[i];
+      var $boxDiv = $('<div class="exercise-box">').attr('id', 'box'+i).css({
+      width:  box.width  + 'px',
+      height: box.height + 'px',
+      top:  box.y + 'px',
+      left: box.x + 'px'
+    })
+    .appendTo('body');
+  }
+  // $box = $('#deer');
+  // boxTopLeft = $box.position();  //{left: 214, top: 243}
+  // boxBottomRight = {
+  //   left: boxTopLeft.left + $('#deer').width(),
+  //   top:  boxTopLeft.top  + $('#deer').height()
+  // };
+});//doc ready
+
+function makeNewPosition(){
+    // Get viewport dimensions (remove the dimension of the div)
+    var h = $(window).height() - 50;
+    var w = $(window).width() - 50;
+    var nh = Math.floor(Math.random() * h);
+    var nw = Math.floor(Math.random() * w);
+    return [nh,nw];
+}
+//moving box
+function animateDiv(){
+    var newq = makeNewPosition();
+    var oldq = $('.a').offset();
+    var speed = calcSpeed([oldq.top, oldq.left], newq);
+    $('.a').animate({ top: newq[0], left: newq[1] }, speed, function(){
+      animateDiv();
+      // console.log($('.a.top'));
+      // console.log( $('.a').position() );
+    });
+};
+
+function calcSpeed(prev, next) {
+    var x = Math.abs(prev[1] - next[1]);
+    var y = Math.abs(prev[0] - next[0]);
+    var greatest = x > y ? x : y;
+    var speedModifier = 0.1;
+    var speed = Math.ceil(greatest/speedModifier);
+    return speed;
+}
+
+
+//////////////////////////////
+//make boxes:
   function makeNewPosition(){
 
     // Get viewport dimensions (remove the dimension of the div)
@@ -276,16 +292,20 @@
 
   //moving box
   function animateDiv(){
-    var newq = makeNewPosition();
-    var oldq = $('.a').offset();
-    var speed = calcSpeed([oldq.top, oldq.left], newq);
 
-    $('.a').animate({ top: newq[0], left: newq[1] }, speed, function(){
-      animateDiv();
-      // console.log($('.a.top'));
-      // console.log( $('.a').position() );
-    });
+    for (var i = 0; i < boxes.length; i++) {
 
+
+      var newq = makeNewPosition();
+      var oldq = $('#box'+i).offset();
+      var speed = calcSpeed([oldq.top, oldq.left], newq);
+
+      $('#box'+i).animate({ top: newq[0], left: newq[1] }, speed, function(){
+        animateDiv();
+        // console.log($('.a.top'));
+        // console.log( $('.a').position() );
+      });
+    }
   };
 
   function calcSpeed(prev, next) {
@@ -303,9 +323,14 @@
 
   }
 
+
+
+
+
+
 </script>
 
-
+<!-- <div class="start" touched="false"><br><br><br><br>Start!</div> -->
 <div id="moving" class='a'></div>
   <!-- Modal -->
   <div class="modal fade" id="myModal" role="dialog">
@@ -327,11 +352,3 @@
 
     </div>
   </div>
-
-
-  <!--
-  1 both hands
-  2 deploy
-  3 move divs
-  4 modal options inc home, link opens in new tab
-  -->
