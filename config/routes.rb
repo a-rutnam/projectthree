@@ -6,4 +6,5 @@ Rails.application.routes.draw do
 
 
   get '/exercise' => 'news_stories#werk'
+  get '/about' => 'news_stories#about'
 end

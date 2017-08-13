@@ -26,11 +26,11 @@ $(document).ready(function(){
   // live site  flydiv:
       // var $flyDiv = '<div class="col-md-4 portfolio-item"><a  href="/exercise?url='+encodeURI(articles[i].url)+'"><img class="img-responsive" src="'+articles[i].urlToImage+'" alt=""></a><h3 class=title>'+articles[i].title+'</h3> <p class=description>'+articles[i].description+'</p></div>'
 
-  //DEMO div
 
-
+        //building each newsstory box  on the fly, but with link to demo modal rather than exercise app page
         var $flyDiv = '<div class="col-md-4 portfolio-item" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal'+i+'"><img class="img-responsive" src="'+articles[i].urlToImage+'" alt=""><h3 class=title>'+articles[i].title+'</h3> <p class=description>'+articles[i].description+'</p></div>'
 
+        //three boxes per row
         if (i<3){
           $('.row1').append($flyDiv);
         }else if (i>2 && i<6) {
@@ -39,7 +39,9 @@ $(document).ready(function(){
           $('.row3').append($flyDiv);
         }
 
-        var $modalDemoLink = '<div id="myModal'+i+'" class="modal fade" role="dialog"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal">&times;</button> <h4 class="modal-title">Modal Header</h4> </div><div class="modal-body"> <p>Unfortunately, until we put a Kinect in every home, The Daily Move will be in Demo mode, but check out this video of the app in full swing!</p><iframe width="560" height="315" src="https://www.youtube.com/embed/2FFOrmv0XDE" frameborder="0" allowfullscreen></iframe><p><br>p.s. If you actually just want to read the article, do five starjumps and then <a href="'+articles[i].url+'">Click Here</a></p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> </div></div></div></div>'
+
+        //building modal with corresponding link on the fly
+        var $modalDemoLink = '<div id="myModal'+i+'" class="modal fade" role="dialog"> <div class="modal-dialog"> <div class="modal-content"> <div class="modal-header"> <button type="button" class="close" data-dismiss="modal">&times;</button> <h4 class="modal-title">Oh no!</h4> </div><div class="modal-body"> <p>Unfortunately, until we put a Kinect in every home, The Daily Move will be in Demo mode, but check out this video of the app in full swing!</p><iframe width="560" height="315" src="https://www.youtube.com/embed/2FFOrmv0XDE" frameborder="0" allowfullscreen></iframe><p><br>p.s. If you actually just want to read the article, do five star-jumps and then <a href="'+articles[i].url+'">Click Here</a></p></div><div class="modal-footer"> <button type="button" class="btn btn-default" data-dismiss="modal">Close</button> </div></div></div></div>'
 
         $('body').append($modalDemoLink);
 

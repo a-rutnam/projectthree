@@ -70,3 +70,8 @@ display: none;
     color: white !important;
     font-family: Times;
   }
+
+  footer{
+    float: right;
+    padding-right: 10px;
+  }
